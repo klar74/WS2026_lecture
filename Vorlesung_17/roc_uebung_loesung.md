@@ -37,6 +37,10 @@ Tatsächlich  OK     80       10        90
 
 6. **Precision = TP / (TP + FP) = 5 / (5 + 10) = 5/15 = 0.333 = 33.3%**
 
+**Zum ROC-Plot:** Diese Werte liefern den Punkt **(FPR, TPR) ≈ (0.111, 0.5)**. Für eine ganze Kurve brauchen wir Ergebnisse bei weiteren Schwellen.
+
+**Achtung bei Accuracy:** Würden wir immer „OK“ vorhersagen, wären bereits 90 von 100 Entscheidungen richtig: **90% Accuracy**, aber kein Defekt würde erkannt. Die 85% allein sagen deshalb wenig darüber aus, wie gut das Modell Defekte erkennt.
+
 ---
 
 ## ✅ Lösung Aufgabe 3: Interpretation
@@ -48,24 +52,24 @@ Tatsächlich  OK     80       10        90
    - Das bedeutet: Etwa jedes 9. gute Teil wird unnötig verworfen
 
 3. **Bewertung für Qualitätskontrolle:**
-   - ❌ **TPR = 50% ist zu niedrig** → Zu viele defekte Teile gelangen zum Kunden
-   - ⚠️ **FPR = 11.1% ist akzeptabel** → Verschwendung, aber nicht kritisch
-   - ⚠️ **Precision = 33.3% ist niedrig** → Nur jede 3. "NOK"-Meldung ist korrekt
+   - **TPR = 50%** → Die Hälfte der Defekte wird übersehen. Für eine Kontrolle, die fast alle Defekte erkennen soll, ist das zu wenig.
+   - **FPR = 11.1%** → Ob diese Fehlalarme akzeptabel sind, hängt von ihren Kosten ab.
+   - **Precision = 33.3%** → Nur jede 3. "NOK"-Meldung ist korrekt.
    
-   **Fazit:** Das Modell muss verbessert werden! Schwellwert senken für höhere Sensitivität.
+   **Fazit:** Die Eignung hängt von den Anforderungen ab. Wenn übersehene Defekte besonders teuer sind, kann eine niedrigere Schwelle sinnvoll sein.
 
 ---
 
 ## 🎯 Qualitätskontrolle-spezifische Bewertung
 
-**Kritisch für Qualitätskontrolle:**
+**Folgen der Fehler abwägen:**
 - **FN = 5 defekte Teile übersehen** → Reklamationen, Imageschaden
-- **FP = 10 gute Teile verworfen** → Materialverschwendung (weniger kritisch)
+- **FP = 10 gute Teile verworfen** → Materialverschwendung
 
-**Empfehlung:** Schwellwert senken
-- Mehr Teile als "NOK" klassifizieren
-- TPR erhöhen (weniger übersehen)
-- FPR steigt (mehr Verschwendung, aber akzeptabel)
+**Mögliche Maßnahme:** Schwellwert senken, wenn übersehene Defekte besonders teuer sind.
+- Es können mehr Teile als "NOK" klassifiziert werden.
+- Die TPR kann steigen: weniger Defekte werden übersehen.
+- Die FPR kann ebenfalls steigen: mehr gute Teile lösen einen Alarm aus. Diese zusätzlichen Kosten müssen wir mit abwägen.
 
 ---
 
@@ -82,19 +86,21 @@ Tatsächlich  OK     80       10        90
 
 ## ✅ Lösung Aufgabe 4: ROC-Kurve verstehen
 
-### Optimaler Schwellwert für Qualitätskontrolle:
+### Wann wäre eine niedrigere Schwelle sinnvoll?
 
-**Antwort:** Ein **niedrigerer Schwellwert** ist optimal für die Qualitätskontrolle.
+**Antwort:** Wenn übersehene Defekte besonders teuer sind, kann eine **niedrigere Schwelle** sinnvoll sein.
 
 **Begründung:**
-- In der Qualitätskontrolle sind **False Negatives kritischer** als False Positives
 - Ein übersehenes defektes Teil (FN) → Kunde erhält defekte Ware → Reklamation, Imageschaden, Folgeschäden ggf. schwer!
-- Ein verworfenes gutes Teil (FP) → Materialverschwendung → weniger kritisch
+- Ein verworfenes gutes Teil (FP) → Materialverschwendung und zusätzliche Kosten
+- Welche Fehler schwerer wiegen, hängt vom Produkt und den Kosten ab.
 
 **Konkret:**
-- Niedrigerer Schwellwert → Mehr Teile werden als "NOK" klassifiziert
-- TPR steigt → Weniger defekte Teile übersehen ✅
-- FPR steigt → Mehr gute Teile verworfen ⚠️ (aber akzeptabel)
+- Niedrigerer Schwellwert → Es können mehr Teile als "NOK" klassifiziert werden
+- TPR kann steigen → Weniger defekte Teile übersehen ✅
+- FPR kann steigen → Mehr gute Teile verworfen ⚠️
+
+**Eine optimale Schwelle können wir aus den gegebenen Zahlen nicht bestimmen.** Dafür brauchen wir die Fehlerkosten und Ergebnisse bei weiteren Schwellen.
 
 ### Warum entspricht "Würfeln" der Diagonalen?
 
@@ -110,6 +116,8 @@ Stellen Sie sich vor, wir haben **kein Modell** und entscheiden **per Münzwurf*
 
 **Bei 50:50 Münzwurf-Entscheidungen:**
 
+Im Durchschnitt erwarten wir die folgenden Anzahlen. Bei einem einzelnen Versuch können die Ergebnisse abweichen.
+
 **1. Was passiert mit den 10 defekten Teilen?**
 - 50% werden richtig als "NOK" erkannt → TP = 5
 - 50% werden fälschlich als "OK" erkannt → FN = 5
@@ -120,27 +128,28 @@ Stellen Sie sich vor, wir haben **kein Modell** und entscheiden **per Münzwurf*
 - 50% werden fälschlich als "NOK" erkannt → FP = 45
 - **FPR = FP/(FP+TN) = 45/(45+45) = 50%**
 
-**Ergebnis:** TPR = FPR = 50% → Punkt (0.5, 0.5) auf der Diagonalen
+**Im Durchschnitt:** TPR = FPR = 50% → Punkt (0.5, 0.5) auf der Diagonalen
 
 #### 🎯 Warum die GANZE Diagonale? 
 **Der Trick: Zufällige Wahrscheinlichkeiten + verschiedene Schwellwerte**
 
 **Stellen Sie sich vor: Ein "Zufalls-Modell"**
-- Für jedes Teil gibt es eine **zufällige Wahrscheinlichkeit** zwischen 0 und 1
+- Für jedes Teil ziehen wir einen **Zufallswert**, gleichmäßig verteilt zwischen 0 und 1
+- Ob das Teil tatsächlich defekt ist, spielt beim Ziehen keine Rolle.
 - Beispiel: Teil 1 → 0.23, Teil 2 → 0.67, Teil 3 → 0.15, etc.
 - Diese Zahlen haben **keine Bedeutung** - sie sind völlig zufällig!
 
 **Jetzt verschiedene Schwellwerte testen:**
 
 **Schwellwert 0.9 (sehr hoch):**
-- Nur Teile mit P > 0.9 werden als "NOK" klassifiziert
+- Nur Teile mit P ≥ 0.9 werden als "NOK" klassifiziert
 - Das sind etwa 10% aller Teile - **egal ob wirklich defekt oder nicht!**
 - Von 10 defekten Teilen: ~1 erkannt → TPR = 10%
 - Von 90 OK-Teilen: ~9 fälschlich als NOK → FPR = 10%
 - **Punkt: (0.1, 0.1)**
 
 **Schwellwert 0.2 (sehr niedrig):**
-- Teile mit P > 0.2 werden als "NOK" klassifiziert  
+- Teile mit P ≥ 0.2 werden als "NOK" klassifiziert
 - Das sind etwa 80% aller Teile - **wieder egal ob wirklich defekt oder nicht!**
 - Von 10 defekten Teilen: ~8 erkannt → TPR = 80%
 - Von 90 OK-Teilen: ~72 fälschlich als NOK → FPR = 80%
@@ -149,7 +158,7 @@ Stellen Sie sich vor, wir haben **kein Modell** und entscheiden **per Münzwurf*
 #### 💡 Die Kernidee:
 **Zufällige Wahrscheinlichkeiten sind "klassenblind":**
 - Ein zufälliges Modell kann nicht zwischen defekt und OK unterscheiden
-- Daher trifft jeder Schwellwert **beide Klassen gleich**
+- Daher trifft jeder Schwellwert **im Durchschnitt denselben Anteil beider Klassen**
 - Bei gleichmäßig verteilten Zufallswerten: Schwellwert x → etwa (1 − x) · 100% aller defekten UND aller OK-Teile als "NOK"
 - **Resultat: TPR ≈ FPR ≈ 1 − x** (z. B. Schwellwert 0.9 → etwa 0.1 = 10%)
 

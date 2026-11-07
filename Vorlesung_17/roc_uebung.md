@@ -98,21 +98,23 @@ Precision = TP / (TP + FP)
 
 **Was passiert, wenn wir den Schwellwert ändern?**
 
-### Niedrigerer Schwellwert (mehr als NOK klassifiziert):
-- TPR: ⬆️ **steigt** (weniger defekte Teile übersehen)
-- FPR: ⬆️ **steigt** (mehr OK-Teile fälschlich als defekt)
+### Niedrigerer Schwellwert (mehr NOK-Meldungen möglich):
+- TPR: ⬆️ **kann steigen oder gleich bleiben** (es können weniger defekte Teile übersehen werden)
+- FPR: ⬆️ **kann steigen oder gleich bleiben** (es können mehr OK-Teile fälschlich als defekt gelten)
 
-### Höherer Schwellwert (weniger als NOK klassifiziert):
-- TPR: ⬇️ **sinkt** (mehr defekte Teile übersehen)
-- FPR: ⬇️ **sinkt** (weniger OK-Teile fälschlich als defekt)
+### Höherer Schwellwert (weniger NOK-Meldungen möglich):
+- TPR: ⬇️ **kann sinken oder gleich bleiben** (es können mehr defekte Teile übersehen werden)
+- FPR: ⬇️ **kann sinken oder gleich bleiben** (es können weniger OK-Teile fälschlich als defekt gelten)
 
-**Frage:** Welcher Schwellwert ist optimal für die Qualitätskontrolle?
+**Frage:** Wann wäre eine niedrigere Schwelle sinnvoll? Vergleichen Sie die Folgen von übersehenen Defekten und Fehlalarmen.
 
 **Überlege und erkläre dann:** Warum entspricht "Würfeln" der Diagonalen im ROC-Plot?
 
 ---
 
 ## 🔧 Vorgehensweise: ROC-Kurve erstellen
+
+**Hinweis:** Die gegebenen Anzahlen liefern nur einen Punkt im ROC-Plot. Für eine ganze Kurve brauchen wir die Vorhersagewerte der einzelnen Teile und ihre wahren Labels, um weitere Schwellen auszuprobieren. Die folgenden Schritte beschreiben dieses Vorgehen.
 
 ### Schritt 1: Wahrscheinlichkeiten sammeln
 - Für jedes Bauteil: Wahrscheinlichkeit "defekt"
