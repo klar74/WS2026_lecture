@@ -80,7 +80,7 @@ def demonstrate_tree_depths():
     # Standard Decision Tree (unbeschränkte Tiefe)
     tree = DecisionTreeClassifier()
     tree.fit(X, y)
-    print(f"Standard Decision Tree Score: {tree.score(X, y):.4f}")
+    print(f"Trefferquote auf den Übungsdaten (unbeschränkte Tiefe): {tree.score(X, y):.4f}")
     plot_decision_boundary(X, y, tree, "Standard Decision Tree (unbeschränkte Tiefe)", "02_standard_tree.png")
     
     # Wichtige Eigenschaften des gefitteten Baums
@@ -110,7 +110,7 @@ def demonstrate_tree_depths():
         tree_depth = DecisionTreeClassifier(max_depth=depth)
         tree_depth.fit(X, y)
         score = tree_depth.score(X, y)
-        print(f"Accuracy: {score:.4f}")
+        print(f"Trefferquote auf den Übungsdaten: {score:.4f}")
         plot_decision_boundary(X, y, tree_depth, f"Decision Tree (max_depth={depth})", f"03_tree_depth_{depth}.png")
 
 def demonstrate_regularization():
@@ -125,7 +125,7 @@ def demonstrate_regularization():
                                       min_samples_leaf=3,
                                       min_samples_split=2)
     tree_reg1.fit(X, y)
-    print(f"Score (min_samples_leaf=3): {tree_reg1.score(X, y):.4f}")
+    print(f"Trefferquote auf den Übungsdaten (min_samples_leaf=3): {tree_reg1.score(X, y):.4f}")
     plot_decision_boundary(X, y, tree_reg1, "Decision Tree (min_samples_leaf=3)", "04_reg_min_samples_leaf.png")
     
     # 2. min_samples_split Parameter
@@ -134,7 +134,7 @@ def demonstrate_regularization():
                                       min_samples_leaf=1,
                                       min_samples_split=10)
     tree_reg2.fit(X, y)
-    print(f"Score (min_samples_split=10): {tree_reg2.score(X, y):.4f}")
+    print(f"Trefferquote auf den Übungsdaten (min_samples_split=10): {tree_reg2.score(X, y):.4f}")
     plot_decision_boundary(X, y, tree_reg2, "Decision Tree (min_samples_split=10)", "05_reg_min_samples_split.png")
     
     # 3. max_leaf_nodes Parameter
@@ -144,7 +144,7 @@ def demonstrate_regularization():
                                       min_samples_split=2,
                                       max_leaf_nodes=8)
     tree_reg3.fit(X, y)
-    print(f"Score (max_leaf_nodes=8): {tree_reg3.score(X, y):.4f}")
+    print(f"Trefferquote auf den Übungsdaten (max_leaf_nodes=8): {tree_reg3.score(X, y):.4f}")
     plot_decision_boundary(X, y, tree_reg3, "Decision Tree (max_leaf_nodes=8)", "06_reg_max_leaf_nodes.png")
 
 def demonstrate_split_criteria():
@@ -156,17 +156,17 @@ def demonstrate_split_criteria():
     # Gini Impurity (Standard)
     tree_gini = DecisionTreeClassifier(max_depth=5, criterion='gini')
     tree_gini.fit(X, y)
-    print(f"Gini Impurity Score: {tree_gini.score(X, y):.4f}")
+    print(f"Trefferquote auf den Übungsdaten mit Gini: {tree_gini.score(X, y):.4f}")
     plot_decision_boundary(X, y, tree_gini, "Decision Tree (Gini Impurity)", "07_gini_criterion.png")
     
     # Entropy
     tree_entropy = DecisionTreeClassifier(max_depth=5, criterion='entropy')
     tree_entropy.fit(X, y)
-    print(f"Entropy Score: {tree_entropy.score(X, y):.4f}")
+    print(f"Trefferquote auf den Übungsdaten mit Entropie: {tree_entropy.score(X, y):.4f}")
     plot_decision_boundary(X, y, tree_entropy, "Decision Tree (Entropy)", "08_entropy_criterion.png")
 
 def create_tree_structure_visualization():
-    """Erstelle eine manuelle Visualisierung der Tree-Struktur"""
+    """Zeichne einen Beispielbaum, nicht den zuvor trainierten Baum"""
     fig = plt.figure(1, figsize=(9, 6))
     ax = plt.gca()
 
@@ -190,7 +190,7 @@ def create_tree_structure_visualization():
     textbox(ax, 0.7, 0.6, "y > -8 ?", slev1)
     textbox(ax, 0.12, 0.3, "x > 4 ?", slev2)
     textbox(ax, 0.62, 0.3, "y > -6 ?", slev2)
-    textbox(ax, 0.88, 0.3, "y > -6 ?", slev2)
+    textbox(ax, 0.88, 0.3, "y > -10 ?", slev2)
 
     # True/False Labels
     textbox(ax, 0.4, 0.75, "true", slev0, alpha=0.99, color='g')
@@ -219,7 +219,7 @@ def create_tree_structure_visualization():
     
     ax.axis([0, 1, 0, 1])
     ax.axis('off')
-    plt.title("Decision Tree Struktur")
+    plt.title("Beispielbaum (nicht der trainierte Baum)")
     
     plt.savefig(os.path.join(PLOT_DIR, "09_tree_structure.png"), dpi=300, bbox_inches='tight')
     print("Plot gespeichert: 09_tree_structure.png")
@@ -230,6 +230,9 @@ def main():
     print("Decision Tree Classifier - Umfassende Demonstration")
     print("=" * 55)
     print(f"Alle Plots werden im Verzeichnis '{PLOT_DIR}' gespeichert.\n")
+    print("Die Trefferquoten zeigen, wie gut der Baum die Übungsdaten erkennt.")
+    print("Mit diesen Daten wurde er auch trainiert. Er kennt sie also schon.")
+    print("Wie gut er neue Daten erkennt, sehen wir daran noch nicht.\n")
     
     # 1. Grundlegende Tree Depths
     demonstrate_tree_depths()
@@ -241,7 +244,7 @@ def main():
     demonstrate_split_criteria()
     
     # 4. Tree-Struktur Visualisierung
-    print("\n=== Decision Tree Struktur (Konzeptionell) ===")
+    print("\n=== Beispielbaum (nicht der trainierte Baum) ===")
     create_tree_structure_visualization()
     
     print(f"\nDemo abgeschlossen! Alle Plots wurden als PNG-Dateien in '{PLOT_DIR}' gespeichert.")
