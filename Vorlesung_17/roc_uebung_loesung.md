@@ -150,8 +150,8 @@ Stellen Sie sich vor, wir haben **kein Modell** und entscheiden **per Münzwurf*
 **Zufällige Wahrscheinlichkeiten sind "klassenblind":**
 - Ein zufälliges Modell kann nicht zwischen defekt und OK unterscheiden
 - Daher trifft jeder Schwellwert **beide Klassen gleich**
-- Schwellwert x → etwa x% aller defekten UND x% aller OK-Teile als "NOK"
-- **Resultat: TPR = FPR = x%**
+- Bei gleichmäßig verteilten Zufallswerten: Schwellwert x → etwa (1 − x) · 100% aller defekten UND aller OK-Teile als "NOK"
+- **Resultat: TPR ≈ FPR ≈ 1 − x** (z. B. Schwellwert 0.9 → etwa 0.1 = 10%)
 
 **Das ist wie ein blindes Modell mit verschiedenen "Risikobereitschaften"!**
 
