@@ -50,13 +50,18 @@ def plot_decision_boundary(X, y, tree, title="Decision Tree Classifier", filenam
     xlim = ax.get_xlim()
     ylim = ax.get_ylim()
     
-    xx, yy = np.meshgrid(np.linspace(*xlim, num=200), np.linspace(*ylim, num=200))
+    # Die echten Baumgrenzen verhindern, dass kleine Bereiche im Raster verschwinden.
+    x_splits = tree.tree_.threshold[tree.tree_.feature == 0]
+    y_splits = tree.tree_.threshold[tree.tree_.feature == 1]
+    x_edges = np.unique(np.r_[xlim, x_splits[(x_splits > xlim[0]) & (x_splits < xlim[1])]])
+    y_edges = np.unique(np.r_[ylim, y_splits[(y_splits > ylim[0]) & (y_splits < ylim[1])]])
+    xx, yy = np.meshgrid((x_edges[:-1] + x_edges[1:]) / 2,
+                        (y_edges[:-1] + y_edges[1:]) / 2)
     Z = tree.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
     n_classes = len(np.unique(y))
-    contours = ax.contourf(xx, yy, Z, alpha=0.7,
-                          levels=np.arange(n_classes + 1) - 0.5,
-                          cmap=CMAP,
-                          zorder=1)
+    ax.pcolormesh(x_edges, y_edges, Z, alpha=0.7,
+                  vmin=-0.5, vmax=n_classes - 0.5,
+                  cmap=CMAP, shading='flat', zorder=1)
     
     ax.set(xlim=xlim, ylim=ylim)
     plt.xlabel('x')
