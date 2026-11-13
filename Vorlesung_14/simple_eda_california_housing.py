@@ -137,10 +137,16 @@ def main():
     
     # Schritt 7: Korrelationen berechnen
     simple_correlation(df)
+
+    analyze_house_age(df)
+    geographic_analysis(df)
+    population_analysis(df)
+    price_categories(df)
+    compare_features(df)
     
     print("\n=== EDA ABGESCHLOSSEN ===")
     print("Grundlegende Analyse des California Housing Datensatzes beendet.")
-    print("Siehe Aufgaben für Studenten am Ende der Datei.")
+    print("Die Lösungen zu den Übungen wurden ebenfalls ausgeführt.")
 
 # =============================================================================
 # ÜBUNGEN
@@ -148,6 +154,7 @@ def main():
 # Erweitern Sie das Skript um die folgenden 5 Funktionen.
 # Implementieren Sie jede Funktion einzeln und testen Sie sie.
 # Rufen Sie die neuen Funktionen am Ende der main() Funktion auf.
+# Die Musterlösungen stehen jeweils direkt unter der Aufgabenbeschreibung.
 
 # -----------------------------------------------------------------------------
 # AUFGABE 1: Altersanalyse
@@ -164,6 +171,21 @@ def main():
 # - df['HouseAge'].max()
 # - df.corr()['target']['HouseAge']
 
+def analyze_house_age(df):
+    """Untersucht das regionale Median-Gebäudealter."""
+    print("\n=== ALTERSANALYSE ===")
+    print(f"Mittelwert der regionalen Median-Gebäudealter: {df['HouseAge'].mean():.2f} Jahre")
+    print(f"Höchster gespeicherter Wert: {df['HouseAge'].max():.0f} Jahre (bei 52 gekappt)")
+    print(f"Korrelation mit dem Hauswert: {df.corr()['target']['HouseAge']:.3f}")
+
+    plt.figure(figsize=(8, 5))
+    plt.hist(df['HouseAge'], bins=30)
+    plt.title('Verteilung des regionalen Median-Gebäudealters')
+    plt.xlabel('Median-Gebäudealter (Jahre)')
+    plt.ylabel('Anzahl Regionen')
+    plt.tight_layout()
+    plt.show()
+
 # -----------------------------------------------------------------------------
 # AUFGABE 2: Geografische Verteilung
 # -----------------------------------------------------------------------------
@@ -178,6 +200,24 @@ def main():
 # - df['Latitude'].max() und df['Latitude'].min()
 # - df.loc[df['Latitude'].idxmax()]
 
+def geographic_analysis(df):
+    """Zeigt die geografische Verteilung und die äußersten Breitengrade."""
+    print("\n=== GEOGRAFISCHE VERTEILUNG ===")
+    print("Eine nördlichste Region:")
+    print(df.loc[df['Latitude'].idxmax(), ['Longitude', 'Latitude', 'target']])
+    print("\nEine südlichste Region:")
+    print(df.loc[df['Latitude'].idxmin(), ['Longitude', 'Latitude', 'target']])
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(df['Longitude'], df['Latitude'], c=df['target'],
+                cmap='RdBu_r', s=10, alpha=0.5)
+    plt.colorbar(label='Median-Hauswert (100.000 USD)')
+    plt.title('Geografische Verteilung der Hauswerte')
+    plt.xlabel('Längengrad')
+    plt.ylabel('Breitengrad')
+    plt.tight_layout()
+    plt.show()
+
 # -----------------------------------------------------------------------------
 # AUFGABE 3: Bevölkerungszahl
 # -----------------------------------------------------------------------------
@@ -191,6 +231,21 @@ def main():
 # - plt.hist(df['Population'], bins=50)
 # - df.nlargest(5, 'Population')
 # - df.sort_values('Population', ascending=False).head(5)
+
+def population_analysis(df):
+    """Untersucht die Bevölkerungszahl der Regionen."""
+    print("\n=== BEVÖLKERUNGSZAHL ===")
+    print(f"Korrelation mit dem Hauswert: {df.corr()['target']['Population']:.3f}")
+    print("\nDie fünf bevölkerungsreichsten Gebiete:")
+    print(df.nlargest(5, 'Population')[['Population', 'Longitude', 'Latitude', 'target']])
+
+    plt.figure(figsize=(8, 5))
+    plt.hist(df['Population'], bins=50)
+    plt.title('Verteilung der Bevölkerungszahl')
+    plt.xlabel('Bevölkerungszahl pro Region')
+    plt.ylabel('Anzahl Regionen')
+    plt.tight_layout()
+    plt.show()
 
 # -----------------------------------------------------------------------------
 # AUFGABE 4: Preiskategorien
@@ -207,6 +262,21 @@ def main():
 # - categories.value_counts()
 # - plt.bar(categories.index, categories.values)
 
+def price_categories(df):
+    """Teilt Hauswerte in drei annähernd gleich große Gruppen ein."""
+    print("\n=== PREISKATEGORIEN ===")
+    categories = pd.qcut(df['target'], q=3, labels=['günstig', 'mittel', 'teuer'])
+    counts = categories.value_counts(sort=False)
+    print(counts)
+
+    plt.figure(figsize=(8, 5))
+    plt.bar(counts.index, counts.values)
+    plt.title('Regionen nach Preiskategorie (Quantile)')
+    plt.xlabel('Preiskategorie')
+    plt.ylabel('Anzahl Regionen')
+    plt.tight_layout()
+    plt.show()
+
 # -----------------------------------------------------------------------------
 # AUFGABE 5: Feature-Vergleich
 # -----------------------------------------------------------------------------
@@ -220,6 +290,25 @@ def main():
 # - correlations.drop('target').head(2) für beste Features
 # - plt.scatter(df[feature1], df[feature2], c=df['target'], cmap='viridis')
 # - plt.xlabel() und plt.ylabel() für Achsenbeschriftung
+
+def compare_features(df):
+    """Vergleicht die zwei am stärksten mit dem Hauswert korrelierten Merkmale."""
+    print("\n=== FEATURE-VERGLEICH ===")
+    correlations = df.corr()['target'].drop('target')
+    strongest = correlations.abs().nlargest(2)
+    feature1, feature2 = strongest.index
+    print("Auswahl nach dem Betrag der Korrelation:")
+    print(correlations.loc[strongest.index])
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(df[feature1], df[feature2], c=df['target'],
+                cmap='viridis', s=10, alpha=0.5)
+    plt.colorbar(label='Median-Hauswert (100.000 USD)')
+    plt.title('Die zwei am stärksten korrelierten Merkmale')
+    plt.xlabel(feature1)
+    plt.ylabel(feature2)
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     main()
