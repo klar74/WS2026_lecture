@@ -36,4 +36,3 @@ Diese Sammlung ergänzt das Skript. Die meisten Seiten sind englisch. Alle Links
 | Ressource | Was du dort findest |
 |---|---|
 | [Seeing Theory (Brown University)](https://seeing-theory.brown.edu/) | Interaktive Visualisierungen zu Mittelwert, Streuung, Wahrscheinlichkeit und Normalverteilung. |
-| [Aufgabensammlung Statistik1 (Sebastian Sauer)](https://sebastiansauer.github.io/statistik1-aufgabensammlung/index.html) | Über 600 deutsche Aufgaben mit Musterlösung. Die Beispiele nutzen R. Aufgaben zu Lage- und Streuungsmaßen sowie Korrelation lassen sich auch ohne R lösen. |
