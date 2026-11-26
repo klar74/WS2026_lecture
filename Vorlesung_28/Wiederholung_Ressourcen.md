@@ -1,6 +1,6 @@
 # Wiederholen und Üben: Online-Ressourcen zur Vorlesung
 
-Diese Sammlung ergänzt das Skript. Die Links sind nach den Themenblöcken der Klausurvorbereitung geordnet. Die meisten Seiten sind englisch. Alle Links wurden am 26.11.2026 auf Erreichbarkeit geprüft.
+Diese Sammlung ergänzt das Skript. Die meisten Seiten sind englisch. Alle Links wurden am 26.11.2026 auf Erreichbarkeit geprüft.
 
 ## Modelle beurteilen
 
